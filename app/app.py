@@ -8,6 +8,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+GEMINI_KEY = os.environ.get("GEMINI_API_KEY")
+SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
+SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
+DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
+
 def fetch_hiphop_releases_page():
     print("Fetching Hip-Hop releases from Wikipedia...")
     url = "https://en.wikipedia.org/wiki/2026_in_hip_hop"
