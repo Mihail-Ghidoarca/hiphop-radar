@@ -19,13 +19,13 @@ jobs:
       - name: Run Docker container
         env: 
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: |
           docker run -d \
             -e GEMINI_API_KEY="${GEMINI_API_KEY}" \
-            -e DISCORD_TOKEN="${DISCORD_TOKEN}" \
+            -e DISCORD_WEBHOOK_URL="${DISCORD_WEBHOOK_URL}" \
             -e SPOTIFY_CLIENT_ID="${SPOTIFY_CLIENT_ID}" \
             -e SPOTIFY_CLIENT_SECRET="${SPOTIFY_CLIENT_SECRET}" \
             hiphop-radar
