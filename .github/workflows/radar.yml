@@ -23,7 +23,7 @@ jobs:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: |
-          docker run -d \
+          docker run --rm \
             -e GEMINI_API_KEY="${GEMINI_API_KEY}" \
             -e DISCORD_WEBHOOK_URL="${DISCORD_WEBHOOK_URL}" \
             -e SPOTIFY_CLIENT_ID="${SPOTIFY_CLIENT_ID}" \
