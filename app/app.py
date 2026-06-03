@@ -45,28 +45,48 @@ def extract_albums_with_gemini(raw_text):
     return response.text.strip()
 
 def get_spotify_token():
-    auth_url = "https://accounts.spotify.com/api/token"
-    res = requests.post(auth_url, {
-        "grant_type": "client_credentials",
-        "client_id": SPOTIFY_CLIENT_ID,
-        "client_secret": SPOTIFY_CLIENT_SECRET
-    })
-    return res.json().get("access_token")
-
-def check_album_on_spotify(token, artist, album):
-    search_url = f"https://api.spotify.com/v1/search?q=artist:{artist}%20album:{album}&type=album&limit=1"
-    headers = {"Authorization": f"Bearer {token}"}
+    auth_url = "https://accounts.spotify.com/api/token" 
     
     try:
-        res = requests.get(search_url, headers=headers).json()
-        items = res.get("albums", {}).get("items", [])
+        res = requests.post(
+            auth_url, 
+            data={"grant_type": "client_credentials"},
+            auth=(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET)
+        )
+        res.raise_for_status()
+        return res.json().get("access_token")
+    except Exception as e:
+        print(f"Error fetching the Spotify token: {e}")
+        if 'res' in locals():
+            print(f"Spotify details: {res.text}")
+        return None
+
+def check_album_on_spotify(token, artist, album):
+    search_url = "https://api.spotify.com/v1/search"
+    headers = {"Authorization": f"Bearer {token}"}
+    
+    query = f'artist:"{artist}" album:"{album}"'
+
+    params = {
+        "q": query,
+        "type": "album",
+        "limit": 1
+    }
+    
+    try:
+        res = requests.get(search_url, headers=headers, params=params)
+        res.raise_for_status()
+        data = res.json()
+        
+        items = data.get("albums", {}).get("items", [])
         if items:
             spotify_url = items[0].get("external_urls", {}).get("spotify", "")
             return f"Album LIVE, listen here: {spotify_url}"
+        
         return "Album not live on Spotify yet."
     except Exception as e:
-        print(f"Error checking Spotify: {e}")
-        return ""
+        print(f"Error checking Spotify for {artist} - {album}: {e}")
+        return "Error checking Spotify."
     
 def main():
     if not all ([GEMINI_KEY, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, DISCORD_WEBHOOK_URL]):

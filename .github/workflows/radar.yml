@@ -1,0 +1,31 @@
+name: Hip-Hop Radar Bot
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight
+  workflow_dispatch:
+
+jobs:
+  run-radar:
+    runs-on: ubuntu-latest
+
+    steps:
+      -name: Checkout repository
+       uses: actions/checkout@v2
+
+      -name: Build Docker image
+        run: docker build -t hiphop-radar .
+
+      -name: Run Docker container
+        env: 
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+        run: |
+          docker run -d \
+            -e GEMINI_API_KEY="${GEMINI_API_KEY}" \
+            -e DISCORD_TOKEN="${DISCORD_TOKEN}" \
+            -e SPOTIFY_CLIENT_ID="${SPOTIFY_CLIENT_ID}" \
+            -e SPOTIFY_CLIENT_SECRET="${SPOTIFY_CLIENT_SECRET}" \
+            hiphop-radar
