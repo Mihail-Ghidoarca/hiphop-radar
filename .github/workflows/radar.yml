@@ -11,18 +11,18 @@ jobs:
 
     steps:
       -name: Checkout repository
-        uses: actions/checkout@v2
+       uses: actions/checkout@v2
 
       -name: Build Docker image
-        run: docker build -t hiphop-radar .
+       run: docker build -t hiphop-radar .
 
       -name: Run Docker container
-        env: 
+       env: 
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
-        run: |
+       run: |
           docker run -d \
             -e GEMINI_API_KEY="${GEMINI_API_KEY}" \
             -e DISCORD_TOKEN="${DISCORD_TOKEN}" \
